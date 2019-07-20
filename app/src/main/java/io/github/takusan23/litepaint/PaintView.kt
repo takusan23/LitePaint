@@ -19,6 +19,7 @@ import android.transition.Slide
 import android.view.Gravity
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
+import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
@@ -163,8 +164,13 @@ class PaintView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
     * */
     fun undoPaint() {
         //配列の中身から一個消す
-        paintList.removeAt(paintList.size - 1)
-        pathList.removeAt(pathList.size - 1)
+        //Undoしすぎないようにする
+        if (paintList.size - 1 >= 0) {
+            paintList.removeAt(paintList.size - 1)
+            pathList.removeAt(pathList.size - 1)
+        } else {
+            Toast.makeText(context, "これ以上戻すことはできません。", Toast.LENGTH_SHORT).show()
+        }
         //画面更新
         invalidate()
     }
