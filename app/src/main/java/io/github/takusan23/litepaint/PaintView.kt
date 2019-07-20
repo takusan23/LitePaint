@@ -12,7 +12,14 @@ import android.R.attr.path
 import android.R.attr.path
 import android.view.MotionEvent
 import android.R.attr.path
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.graphics.*
+import android.transition.Slide
+import android.view.Gravity
+import android.view.animation.AlphaAnimation
+import android.view.animation.Animation
+import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
 
@@ -64,13 +71,18 @@ class PaintView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
                 val path = Path()
                 path.moveTo(x, y)
 
+                //透明以外はMainActivityの色を入れてる変数から持ってくる
+                if (color != Color.TRANSPARENT) {
+                    color = (context as MainActivity).colorInt
+                }
+
                 //Paint生成する。色変更とかここで
                 val paint = Paint()
                 paint.setColor(color) //変数にした。
                 paint.setStyle(Paint.Style.STROKE)
                 paint.setStrokeJoin(Paint.Join.ROUND)
                 paint.setStrokeCap(Paint.Cap.ROUND)
-                paint.setStrokeWidth(10f)
+                paint.setStrokeWidth((context as MainActivity).sizeInt)
                 //消しゴムモードはBitmap消すやつつける
                 if (color == Color.TRANSPARENT) {
                     paint.setXfermode(PorterDuffXfermode(PorterDuff.Mode.CLEAR) as Xfermode?);
@@ -82,6 +94,16 @@ class PaintView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
                 pathList.add(path)
                 //画面更新
                 invalidate()
+
+                //FABが邪魔なので非表示にする
+                (context as MainActivity).fab.animate().alpha(0.0f).setStartDelay(10)
+                    .setListener(object : AnimatorListenerAdapter() {
+                        override fun onAnimationEnd(animation: Animator?) {
+                            super.onAnimationEnd(animation)
+                            (context as MainActivity).fab.visibility = View.GONE
+                        }
+                    })
+
             }
             MotionEvent.ACTION_MOVE -> {
                 //タッチダウンしたときに生成したPathを取得してなぞれるようにする
@@ -102,6 +124,14 @@ class PaintView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
                 pathList.set(size, path)
                 //画面更新
                 invalidate()
+
+                //FABを表示させる
+                (context as MainActivity).fab.animate().alpha(1.0f).setListener(object : AnimatorListenerAdapter() {
+                    override fun onAnimationEnd(animation: Animator?) {
+                        super.onAnimationEnd(animation)
+                        (context as MainActivity).fab.visibility = View.VISIBLE
+                    }
+                })
             }
         }
         return true
@@ -116,16 +146,27 @@ class PaintView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
         invalidate()
     }
 
-    fun setBlackPen() {
+    fun setPan(colorInt: Int) {
         //カラーコード
         //色反映は画面に触れたとき。そのときにPaintが生成される
-        color = Color.BLACK
+        color = colorInt
     }
 
     fun setEraser() {
         //カラーコード
         //色反映は画面に触れたとき。そのときにPaintが生成される
         color = Color.TRANSPARENT
+    }
+
+    /*
+    * 一個前に戻す
+    * */
+    fun undoPaint() {
+        //配列の中身から一個消す
+        paintList.removeAt(paintList.size - 1)
+        pathList.removeAt(pathList.size - 1)
+        //画面更新
+        invalidate()
     }
 
 }

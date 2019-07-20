@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
+
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:padding="10dp"
+            android:layout_height="wrap_content">
+
+        <Button
+                android:text="くろ"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/paint_bottom_sheet_button_color_black"
+                android:layout_weight="1"/>
+
+        <Button
+                android:text="あか"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/paint_bottom_sheet_button_color_red"
+                android:layout_weight="1"/>
+
+        <Button
+                android:text="あお"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/paint_bottom_sheet_button_color_blue"
+                android:layout_weight="1"/>
+    </LinearLayout>
+
+    <LinearLayout
+            android:orientation="horizontal"
+            android:padding="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <Button
+                android:text="ほそい"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/paint_bottom_sheet_button_size_small"
+                android:layout_weight="1"/>
+
+        <Button
+                android:text="ふつう"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/paint_bottom_sheet_button_size_normal"
+                android:layout_weight="1"/>
+
+        <Button
+                android:text="ふとい"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/paint_bottom_sheet_button_size_big"
+                android:layout_weight="1"/>
+    </LinearLayout>
+</LinearLayout>
